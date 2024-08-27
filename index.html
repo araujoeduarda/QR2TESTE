@@ -3,53 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QR Code e Leitura de Texto</title>
+    <title>Gerar QR Code</title>
     <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
 <body>
-    <h1>Gerar QR Code e Texto em Voz Alta</h1>
-
+    <h1>Gerar QR Code</h1>
     <div id="qrcode"></div>
-
-    <p id="message">Carregando texto...</p>
 
     <script>
         // URL da página web que contém o texto dinâmico
-        const url = "https://seusite.com/tts"; // Altere para a URL onde sua página HTML está hospedada
+        const pageUrl = "https://seusite.com/tts"; // Altere para a URL onde sua página HTML está hospedada
+
+        // Dados JSON a serem codificados no QR Code
+        const jsonData = JSON.stringify({ url: pageUrl });
 
         // Gerar o QR Code
-        QRCode.toCanvas(document.getElementById('qrcode'), url, function (error) {
+        QRCode.toCanvas(document.getElementById('qrcode'), jsonData, function (error) {
             if (error) console.error(error);
             console.log('QR code gerado!');
         });
-
-        // Função para buscar o texto dinamicamente
-        async function fetchText() {
-            try {
-                // Suponha que você esteja carregando o texto de um arquivo ou API
-                const response = await fetch('https://seusite.com/api/texto'); // URL da sua API ou arquivo
-                const data = await response.json();
-
-                // Exibir o texto na página
-                document.getElementById('message').innerText = data.text;
-
-                // Falar o texto em voz alta
-                speakText(data.text);
-            } catch (error) {
-                document.getElementById('message').innerText = 'Erro ao carregar o texto.';
-            }
-        }
-
-        // Função para falar o texto em voz alta
-        function speakText(text) {
-            const synth = window.speechSynthesis;
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'pt-BR'; // Definir para Português Brasil
-            synth.speak(utterance);
-        }
-
-        // Carregar o texto e falar automaticamente
-        fetchText();
     </script>
 </body>
 </html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Texto em Voz Alta</title>
+</head>
+<body>
+    <h1>Texto em Voz Alta</h1>
+    <p id="message">Carregando texto...</p>
+
+    <script>
+        // Função para buscar o texto dinamicamente
+        async function fetchText() {
+            try {
+                // Suponha que você esteja carregando o texto de um arquivo ou API
+                const response = await fetch('https://seusite.com/api/texto'); // URL da sua API ou arquivo
+                const data = await response.json();
+
+                // Exibir o texto na página
+                document.getElementById('message').innerText = data.text;
+
+                // Falar o texto em voz alta
+                speakText(data.text);
+            } catch (error) {
+                document.getElementById('message').innerText = 'Erro ao carregar o texto.';
+            }
+        }
+
+        // Função para falar o texto em voz alta
+        function speakText(text) {
+            const synth = window.speechSynthesis;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'pt-BR'; // Definir para Português Brasil
+            synth.speak(utterance);
+        }
+
+        // Carregar o texto e falar automaticamente
+        fetchText();
+    </script>
+</body>
+</html>

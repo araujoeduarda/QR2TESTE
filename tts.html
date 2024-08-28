@@ -10,36 +10,39 @@
     <p id="message">Carregando texto...</p>
 
     <script>
-        // URL do arquivo JSON que contém o texto dinâmico
         const jsonUrl = 'https://araujoeduarda.github.io/meu-qr-texto/teste.json';
 
-        // Função para buscar o texto dinamicamente
         async function fetchText() {
             try {
+                console.log('Buscando texto de:', jsonUrl);
                 const response = await fetch(jsonUrl);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
                 const data = await response.json();
+                console.log('Texto carregado:', data.text);
                 document.getElementById('message').innerText = data.text;
-                // Pequeno atraso para garantir que o texto seja exibido antes da leitura
-                setTimeout(() => speakText(data.text), 500); 
+                speakText(data.text); // Chamar a função de síntese de voz
             } catch (error) {
                 document.getElementById('message').innerText = 'Erro ao carregar o texto.';
                 console.error('Erro ao carregar o texto:', error);
             }
         }
 
-        // Função para falar o texto em voz alta
         function speakText(text) {
             if ('speechSynthesis' in window) {
                 const synth = window.speechSynthesis;
                 const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'pt-BR'; // Definir para Português Brasil
+                utterance.lang = 'pt-BR';
+                utterance.onend = () => console.log('Leitura concluída');
+                utterance.onerror = (event) => console.error('Erro na síntese de voz:', event);
+                console.log('Iniciando síntese de voz com o texto:', text);
                 synth.speak(utterance);
             } else {
                 console.error('API de síntese de voz não suportada neste navegador.');
             }
         }
 
-        // Carregar o texto e falar automaticamente ao carregar a página
         fetchText();
     </script>
 </body>

@@ -10,9 +10,23 @@
     <p id="message">Carregando texto...</p>
 
     <script>
-        const jsonUrl = 'https://araujoeduarda.github.io/meu-qr-texto/teste.json';
+        // Lista de URLs JSON contendo textos diferentes
+        const jsonUrls = [
+            'https://araujoeduarda.github.io/meu-qr-texto/versiculo1.json',
+            'https://araujoeduarda.github.io/meu-qr-texto/versiculo2.json',
+            'https://araujoeduarda.github.io/meu-qr-texto/versiculo3.json'
+            // Adicione mais URLs conforme necessário
+        ];
 
+        // Função para obter um URL aleatório da lista
+        function getRandomJsonUrl() {
+            const randomIndex = Math.floor(Math.random() * jsonUrls.length);
+            return jsonUrls[randomIndex];
+        }
+
+        // Função para buscar o texto dinamicamente
         async function fetchText() {
+            const jsonUrl = getRandomJsonUrl(); // Escolher um JSON aleatório
             try {
                 console.log('Buscando texto de:', jsonUrl);
                 const response = await fetch(jsonUrl);
@@ -22,18 +36,20 @@
                 const data = await response.json();
                 console.log('Texto carregado:', data.text);
                 document.getElementById('message').innerText = data.text;
-                speakText(data.text); // Chamar a função de síntese de voz
+                // Pequeno atraso para garantir que o texto seja exibido antes da leitura
+                setTimeout(() => speakText(data.text), 500); 
             } catch (error) {
                 document.getElementById('message').innerText = 'Erro ao carregar o texto.';
                 console.error('Erro ao carregar o texto:', error);
             }
         }
 
+        // Função para falar o texto em voz alta
         function speakText(text) {
             if ('speechSynthesis' in window) {
                 const synth = window.speechSynthesis;
                 const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'pt-BR';
+                utterance.lang = 'pt-BR'; // Definir para Português Brasil
                 utterance.onend = () => console.log('Leitura concluída');
                 utterance.onerror = (event) => console.error('Erro na síntese de voz:', event);
                 console.log('Iniciando síntese de voz com o texto:', text);
@@ -43,6 +59,7 @@
             }
         }
 
+        // Carregar o texto e falar automaticamente ao carregar a página
         fetchText();
     </script>
 </body>

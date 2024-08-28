@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerar QR Code</title>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
     <h1>Gerar QR Code</h1>
@@ -12,16 +12,12 @@
 
     <script>
         // URL da página web que contém o texto dinâmico
-        const pageUrl = "https://seusite.com/tts"; // Altere para a URL onde sua página HTML está hospedada
+        const pageUrl = "https://araujoeduarda.github.io/meu-qr-texto/tts.html"; // Altere para a URL correta da sua página tts.html
 
-        // Dados JSON a serem codificados no QR Code
-        const jsonData = JSON.stringify({ url: pageUrl });
+        // Gerar o QR Code com a URL da página HTML
+        new QRCode(document.getElementById("qrcode"), pageUrl);
 
-        // Gerar o QR Code
-        QRCode.toCanvas(document.getElementById('qrcode'), jsonData, function (error) {
-            if (error) console.error(error);
-            console.log('QR code gerado!');
-        });
+        console.log('QR code gerado com a URL:', pageUrl);
     </script>
 </body>
 </html>
